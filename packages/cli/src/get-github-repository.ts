@@ -98,7 +98,7 @@ export const normalizeGitRemoteUrl = (url: string): ParsedGitRemote | null => {
 	return null;
 };
 
-export const getGifRef = (logLevel: LogLevel): string | null => {
+export const getGitRef = (logLevel: LogLevel): string | null => {
 	try {
 		const ret = execSync('git rev-parse --abbrev-ref HEAD', {
 			stdio: ['ignore', 'pipe', 'ignore'],
@@ -152,10 +152,10 @@ export const getGitSource = ({
 
 	const fromEnv = getFromEnvVariables();
 	if (fromEnv) {
-		return getFromEnvVariables();
+		return fromEnv;
 	}
 
-	const ref = getGifRef(logLevel);
+	const ref = getGitRef(logLevel);
 	if (!ref) {
 		return null;
 	}
