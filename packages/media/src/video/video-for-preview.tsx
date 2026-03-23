@@ -64,6 +64,7 @@ type VideoForPreviewProps = {
 	readonly debugAudioScheduling: boolean;
 	readonly headless: boolean;
 	readonly onError: MediaOnError | undefined;
+	readonly credentials: RequestCredentials | undefined;
 };
 
 type VideoForPreviewAssertedShowingProps = VideoForPreviewProps & {
@@ -95,6 +96,7 @@ const VideoForPreviewAssertedShowing: React.FC<
 	debugAudioScheduling,
 	headless,
 	onError,
+	credentials,
 	controls,
 }) => {
 	const src = usePreload(unpreloadedSrc);
@@ -112,7 +114,7 @@ const VideoForPreviewAssertedShowing: React.FC<
 		useState(false);
 
 	const [playing] = Timeline.usePlayingState();
-	const timelineContext = useContext(Internals.TimelineContext);
+	const timelineContext = Internals.useTimelineContext();
 	const globalPlaybackRate = timelineContext.playbackRate;
 	const sharedAudioContext = useContext(SharedAudioContext);
 	const buffer = useBufferState();
@@ -229,6 +231,7 @@ const VideoForPreviewAssertedShowing: React.FC<
 				onVideoFrameCallback: initialOnVideoFrameRef.current ?? null,
 				playing: initialPlaying.current,
 				sequenceOffset: initialSequenceOffset.current,
+				credentials,
 			});
 
 			mediaPlayerRef.current = player;
@@ -361,6 +364,7 @@ const VideoForPreviewAssertedShowing: React.FC<
 		videoConfig.fps,
 		onError,
 		videoConfig.durationInFrames,
+		credentials,
 	]);
 
 	const classNameValue = useMemo(() => {
